@@ -3,37 +3,39 @@ blocChat = angular.module('BlocChat', ['ui.router','firebase','ui.bootstrap','an
 blocChat.config(['$stateProvider', '$locationProvider', function($stateProvider, $locationProvider) {
    $locationProvider.html5Mode(true);
  
-   $stateProvider.state('landing', {
+   $stateProvider.state('home', {
      url: '/',
-     controller: 'Landing.controller',
-     templateUrl: '/templates/landing.html'
+     controller: 'Home.controller',
+     templateUrl: '/templates/home.html'
    });
 
 }]);
 
-blocChat.controller('Landing.controller', ["$scope", function($scope) {
+blocChat.controller('Home.controller', ["$scope", function($scope) {
 
    $scope.subText = "Turn the music up!";
    $scope.mainText = "Bloc Jams";
 
 }]);
 
+/*blocChat.controller("Home.controller", function($scope, $firebaseObject) {
+  var ref = new Firebase("https://bloc-chat.firebaseio.com/");
+  // download the data into a local object
+  $scope.data = $firebaseObject(ref);
+  // putting a console.log here won't work, see below
 
-/*  
-
-// define our app and dependencies (remember to include firebase!)
-
-var app = angular.module("sampleApp", ["firebase"]);
-
-// inject $firebaseAuth into our controller
-
-app.controller("SampleCtrl", ["$scope", "$firebaseAuth",
-  function($scope, $firebaseAuth) {
-    var ref = new Firebase("https://<your-firebase>.firebaseio.com/");
-    var auth = $firebaseAuth(ref);
-  }
-]);
-
-}]);
-
+  $scope.subText = "Turn the music up!";
+  $scope.mainText = "Bloc Jams";
+});
 */
+
+blocChat.factory('Room', ['$firebase', function($firebase) {
+
+  var firebaseRef = new Firebase("https://bloc-chat.firebaseio.com/");
+  var rooms = $firebase(firebaseRef.child('rooms')).$asArray();;
+
+  return {
+    all: rooms
+  }
+}])
+
